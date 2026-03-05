@@ -2,6 +2,8 @@
 
 Google Sheets add-on with custom functions for web scraping, AI extraction, and search powered by the Spider API.
 
+![Spider for Google Sheets](screenshot.png)
+
 ## Custom Functions
 
 | Function | Description |
