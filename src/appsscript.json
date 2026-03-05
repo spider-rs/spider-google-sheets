@@ -9,6 +9,9 @@
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/script.container.ui"
   ],
+  "urlFetchWhitelist": [
+    "https://api.spider.cloud/"
+  ],
   "addOns": {
     "common": {
       "name": "Spider for Google Sheets",
