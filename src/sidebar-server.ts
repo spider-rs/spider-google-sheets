@@ -39,6 +39,8 @@ function saveDefaultFormat(format: string): void {
 /**
  * Get credit balance for the sidebar. Called from client-side JS.
  */
-function getCreditsBalance(): number | string {
-  return SPIDER_CREDITS();
+function getCreditsBalance(): { credits: number | string; dollars: string } {
+  const credits = SPIDER_CREDITS();
+  const dollars = typeof credits === "number" ? `$${(credits / 10000).toFixed(2)}` : "—";
+  return { credits, dollars };
 }

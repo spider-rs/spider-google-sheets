@@ -159,7 +159,12 @@ function SPIDER_CREDITS(): number | string {
 
   try {
     const data = JSON.parse(res.body);
-    return typeof data.credits === "number" ? data.credits : data.credits ?? "Unknown";
+    const credits = data?.data?.credits ?? data?.credits;
+    if (credits !== undefined && credits !== null) {
+      const num = parseFloat(credits);
+      return isNaN(num) ? credits : Math.round(num);
+    }
+    return "Unknown";
   } catch {
     return "Error: Could not parse response.";
   }

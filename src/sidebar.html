@@ -57,8 +57,8 @@
   <div class="section">
     <label>Credit Balance</label>
     <div class="credits-box">
-      <div id="credits-value" class="credits-number">—</div>
-      <div class="info">credits remaining</div>
+      <div id="credits-dollars" class="credits-number">—</div>
+      <div id="credits-value" class="info">credits remaining</div>
     </div>
     <div class="actions">
       <button class="btn-secondary" onclick="refreshCredits()">Refresh</button>
@@ -104,11 +104,15 @@
     }
 
     function refreshCredits() {
-      document.getElementById("credits-value").textContent = "...";
-      google.script.run.withSuccessHandler(function(credits) {
-        document.getElementById("credits-value").textContent = credits;
+      document.getElementById("credits-dollars").textContent = "...";
+      document.getElementById("credits-value").textContent = "";
+      google.script.run.withSuccessHandler(function(result) {
+        document.getElementById("credits-dollars").textContent = result.dollars || "—";
+        var c = result.credits;
+        document.getElementById("credits-value").textContent = typeof c === "number" ? c.toLocaleString() + " credits" : "";
       }).withFailureHandler(function() {
-        document.getElementById("credits-value").textContent = "—";
+        document.getElementById("credits-dollars").textContent = "—";
+        document.getElementById("credits-value").textContent = "";
       }).getCreditsBalance();
     }
 
