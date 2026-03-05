@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; font-family: "Google Sans", Arial, sans-serif; }
+    body { padding: 16px; margin: 0; color: #202124; font-size: 14px; }
+    h2 { font-size: 16px; font-weight: 500; padding: 0 0 8px 0; }
+    label { display: block; font-size: 12px; color: #5f6368; padding: 12px 0 4px 0; }
+    input[type="text"], input[type="password"], select {
+      width: 100%; padding: 8px 12px; border: 1px solid #dadce0; border-radius: 4px;
+      font-size: 14px; outline: none;
+    }
+    input:focus, select:focus { border-color: #1a73e8; }
+    button {
+      padding: 8px 16px; border: none; border-radius: 4px; font-size: 14px;
+      cursor: pointer; font-weight: 500;
+    }
+    .btn-primary { background: #1a73e8; color: white; }
+    .btn-primary:hover { background: #1557b0; }
+    .btn-secondary { background: #f1f3f4; color: #202124; }
+    .btn-secondary:hover { background: #e8eaed; }
+    .status { padding: 8px 0; font-size: 13px; color: #5f6368; }
+    .status.success { color: #188038; }
+    .status.error { color: #d93025; }
+    .credits-box {
+      padding: 12px; background: #f8f9fa; border-radius: 8px; text-align: center;
+    }
+    .credits-number { font-size: 24px; font-weight: 500; color: #1a73e8; }
+    .section { padding: 0 0 16px 0; border-bottom: 1px solid #e8eaed; }
+    .actions { display: flex; gap: 8px; padding: 8px 0 0 0; }
+    .info { font-size: 12px; color: #80868b; padding: 4px 0 0 0; }
+  </style>
+</head>
+<body>
+  <h2>Spider Settings</h2>
+
+  <div class="section">
+    <div id="user-email" class="info"></div>
+    <label for="api-key">API Key</label>
+    <input type="password" id="api-key" placeholder="sk-..." />
+    <div class="actions">
+      <button class="btn-primary" onclick="saveKey()">Save Key</button>
+      <button class="btn-secondary" onclick="toggleKeyVisibility()">Show</button>
+    </div>
+    <div id="key-status" class="status"></div>
+  </div>
+
+  <div class="section">
+    <label for="default-format">Default Scrape Format</label>
+    <select id="default-format" onchange="saveFormat()">
+      <option value="markdown">Markdown</option>
+      <option value="text">Plain Text</option>
+      <option value="raw">Raw HTML</option>
+    </select>
+  </div>
+
+  <div class="section">
+    <label>Credit Balance</label>
+    <div class="credits-box">
+      <div id="credits-value" class="credits-number">—</div>
+      <div class="info">credits remaining</div>
+    </div>
+    <div class="actions">
+      <button class="btn-secondary" onclick="refreshCredits()">Refresh</button>
+    </div>
+  </div>
+
+  <div class="info" style="padding: 16px 0 0 0;">
+    Get your API key at <a href="https://spider.cloud" target="_blank">spider.cloud</a>
+  </div>
+
+  <script>
+    function init() {
+      google.script.run.withSuccessHandler(function(settings) {
+        document.getElementById("user-email").textContent = settings.email || "";
+        document.getElementById("default-format").value = settings.format;
+        if (settings.hasKey) {
+          document.getElementById("key-status").textContent = "API key is set.";
+          document.getElementById("key-status").className = "status success";
+          refreshCredits();
+        }
+      }).getSettings();
+    }
+
+    function saveKey() {
+      var key = document.getElementById("api-key").value;
+      var status = document.getElementById("key-status");
+      status.textContent = "Saving...";
+      status.className = "status";
+      google.script.run.withSuccessHandler(function(msg) {
+        status.textContent = msg;
+        status.className = "status success";
+        document.getElementById("api-key").value = "";
+        refreshCredits();
+      }).withFailureHandler(function(err) {
+        status.textContent = "Error: " + err.message;
+        status.className = "status error";
+      }).saveApiKey(key);
+    }
+
+    function saveFormat() {
+      var format = document.getElementById("default-format").value;
+      google.script.run.saveDefaultFormat(format);
+    }
+
+    function refreshCredits() {
+      document.getElementById("credits-value").textContent = "...";
+      google.script.run.withSuccessHandler(function(credits) {
+        document.getElementById("credits-value").textContent = credits;
+      }).withFailureHandler(function() {
+        document.getElementById("credits-value").textContent = "—";
+      }).getCreditsBalance();
+    }
+
+    function toggleKeyVisibility() {
+      var input = document.getElementById("api-key");
+      input.type = input.type === "password" ? "text" : "password";
+    }
+
+    init();
+  </script>
+</body>
+</html>
