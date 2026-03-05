@@ -9,7 +9,7 @@ Google Sheets add-on with custom functions for web scraping, AI extraction, and 
 | Function | Description |
 |----------|-------------|
 | `=SPIDER_SCRAPE(url, [format])` | Scrape a URL. Format: `"markdown"`, `"text"`, `"raw"` |
-| `=SPIDER_EXTRACT(url, prompt)` | AI extraction with a prompt |
+| `=SPIDER_EXTRACT(url, prompt)` | AI extraction with a prompt. Requires [AI Studio](https://spider.cloud/credits/new?ref=addon) subscription. |
 | `=SPIDER_SEARCH(query, [num])` | Web search results (title, url, description) |
 | `=SPIDER_LINKS(url)` | Extract all links from a page |
 | `=SPIDER_SCREENSHOT(url)` | Get a screenshot URL |
@@ -20,7 +20,7 @@ Google Sheets add-on with custom functions for web scraping, AI extraction, and 
 - **Settings** — Enter API key, set default format, view credits
 - **Scrape Selected URLs** — Bulk scrape from selected cells
 - **Crawl Site to New Sheet** — Crawl a site into a new tab
-- **AI Extract Column** — AI extract from URL column with a prompt
+- **AI Extract Column** — AI extract from URL column with a prompt (requires [AI Studio](https://spider.cloud/credits/new?ref=addon) subscription)
 - **Search to Sheet** — Search results into a new tab
 
 ## Setup

@@ -31,6 +31,7 @@ function SPIDER_SCRAPE(url: string, format?: string): string {
 
 /**
  * Extract structured data from a URL using AI.
+ * Requires an AI Studio subscription (https://spider.cloud/credits/new).
  *
  * @param {string} url The URL to extract from.
  * @param {string} prompt What to extract (e.g., "Extract the page title and description").
